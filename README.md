@@ -10,9 +10,11 @@ Why use plink? Plink converts the VCF into a binary document that allows for ext
 
 **For an example** See `/projects/ps-gleesonlab5/user/dantaki/plink_tut/` 
 
-## Method
+---
 
-* 1. Create Unique Identifiers
+# Method
+
+## 1. Create Unique Identifiers
 
 ```
 $ bcftools annotate -Oz -x ID -I '%CHROM:%POS0:%END:%REF:%ALT' myvcf.vcf.gz >myvcf.reid.vcf.gz
@@ -24,7 +26,7 @@ $ bcftools annotate -Oz -x ID -I '%CHROM:%POS0:%END:%REF:%ALT' myvcf.vcf.gz >myv
   * %REF   : reference allele
   * %ALT   : derived allele
 
-* 2. Convert VCF into plink Bfile format
+## 2. Convert VCF into plink Bfile format
 
 **requires plink v1.90**
 
@@ -37,7 +39,7 @@ plink --vcf myvcf.reid.vcf.gz --make-bed --out myvcf --double-id
   * `--double-id` : plink assumes sample ids are formatted like **FID_IID**
     this option tells plink to write out the FID and IID as the sample ID
 
-* 3. Update Sample information
+## 3. Update Sample information
 
 Since plink uses binary files, we have to re-configure the family structure and genders
 
@@ -55,7 +57,7 @@ Since plink uses binary files, we have to re-configure the family structure and 
 
   * `plink --bfile myvcf.upid --update-parents up.parents.txt --update-sex up.sex.txt --make-bed --out myvcf.final`
 
-* 4. Count Alleles
+## 4. Count Alleles
 
 Plink correctly determines allele frequency by omitting children. A correct estimate of allele frequency in a population only considers unique genomes. Children are half copies of their parents, thus plink only considers founders for allele frequency.
 
@@ -82,7 +84,7 @@ Note that plink records the minor allele frequency, NOT the ALT allele frequency
 To calculate the ALT allele frequency, for variants where ALT is major, just subtract 1 from the minor allele frequency.
 So for `1:28590:28591:T:TGG`, the minor allele frequency is 0.25, but the ALT allele frequency is 0.75
 
-* 5. Find Mendelian Errors
+## 5. Find Mendelian Errors
 
 ```
 plink --bfile myvcf.final --mendel --out myvcf
@@ -93,7 +95,7 @@ Note: this will create large files!
 [.*mendel file formats](https://www.cog-genomics.org/plink/1.9/formats#mendel)
 
 
-* 6. Count Transmission Rates
+## 6. Count Transmission Rates
 
 **use plinkv1.07** until an updated release is provided. [See this bug report](https://github.com/chrchang/plink-ng/issues/90)
 
