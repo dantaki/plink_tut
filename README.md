@@ -29,10 +29,11 @@ Methods
 
 * [Calculate Transmission Rates](https://github.com/dantaki/plink_tut/blob/master/README.md#6-calculate-transmission-rates)
 
-* [**Tips and Tricks**](for VCF file://github.com/dantaki/plink_tut/blob/master/README.md#tips-and-tricks)
+* [Tips and Tricks](for VCF file://github.com/dantaki/plink_tut/blob/master/README.md#tips-and-tricks)
   * [TSCC/Comet Binaries](https://github.com/dantaki/plink_tut/blob/master/README.md#precompiled-plink-binaries)
   * [Converting Output to Tab-Delimited](https://github.com/dantaki/plink_tut/blob/master/README.md#converting-space-delimited-output-to-tab-delimited)
   * [Common File Formats](https://github.com/dantaki/plink_tut/blob/master/README.md#common-file-formats)
+    
     *[.fam Format](https://github.com/dantaki/plink_tut/blob/master/README.md#fam)
 
 ---
