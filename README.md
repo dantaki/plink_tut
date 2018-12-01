@@ -17,23 +17,23 @@ Why use plink? Plink converts the VCF into a binary document that allows for ext
 
 Methods
 
-* [Create Unique Variant Identifiers]()
+* [Create Unique Variant Identifiers](https://github.com/dantaki/plink_tut/blob/master/README.md#1-create-unique-variant-identifiers)
 
-* [Convert VCF into plink binary files]()
+* [Convert VCF into plink binary files](https://github.com/dantaki/plink_tut/blob/master/README.md#2-convert-vcf-into-plink-b-file-format)
 
-* [Update Sample Information]()
+* [Update Sample Information](https://github.com/dantaki/plink_tut/blob/master/README.md#3-update-sample-information)
 
-* [Calculate Allele Frequency]()
+* [Calculate Allele Frequency](https://github.com/dantaki/plink_tut/blob/master/README.md#4-calculate-allele-frequency)
 
-* [Find Mendelian Errors]()
+* [Find Mendelian Errors](https://github.com/dantaki/plink_tut/blob/master/README.md#5-find-mendelian-errors)
 
-* [Calculate Transmission Rates]()
+* [Calculate Transmission Rates](https://github.com/dantaki/plink_tut/blob/master/README.md#6-calculate-transmission-rates)
 
-* [**Tips and Tricks**]()
-  * [TSCC/Comet Binaries]()
-  * [Converting Output to Tab-Delimited]()
-  * [Common File Formats]()
-    *[.fam Format]()
+* [**Tips and Tricks**](for VCF file://github.com/dantaki/plink_tut/blob/master/README.md#tips-and-tricks)
+  * [TSCC/Comet Binaries](https://github.com/dantaki/plink_tut/blob/master/README.md#precompiled-plink-binaries)
+  * [Converting Output to Tab-Delimited](https://github.com/dantaki/plink_tut/blob/master/README.md#converting-space-delimited-output-to-tab-delimited)
+  * [Common File Formats](https://github.com/dantaki/plink_tut/blob/master/README.md#common-file-formats)
+    *[.fam Format](https://github.com/dantaki/plink_tut/blob/master/README.md#fam)
 
 ---
 
@@ -45,15 +45,19 @@ Methods
 $ bcftools annotate -Oz -x ID -I '%CHROM:%POS0:%END:%REF:%ALT' myvcf.vcf.gz >myvcf.reid.vcf.gz
 ```
 
-  * %CHROM : chromosome
-  * %POS0  : 0-base start
-  * %END   : end position
-  * %REF   : reference allele
-  * %ALT   : derived allele
+  * `-Oz`   : output as bgzip compressed VCF
+  * `-x ID` : remove `ID` entry
+
+  * `-I `   : replace `ID` entry with:
+    * %CHROM  : chromosome
+    * %POS0   : 0-base start
+    * %END    : end position
+    * %REF    : reference allele
+    * %ALT    : derived allele
 
 ## 2. Convert VCF into plink B-file format
 
-**requires plink v1.90**
+:open_mouth: :exclamation: **requires plink v1.90** :open_mouth: :exclamation:
 
 ```
 plink --vcf myvcf.reid.vcf.gz --make-bed --out myvcf --double-id
@@ -63,6 +67,8 @@ plink --vcf myvcf.reid.vcf.gz --make-bed --out myvcf --double-id
   * `--out`       : output prefix
   * `--double-id` : plink assumes sample ids are formatted like **FID_IID**
     this option tells plink to write out the FID and IID as the sample ID
+
+  * `--double-id` is important because if your sample name in the VCF is `123_ABC_DAD` plink will assume `123` is the FID which may be incorrect.
 
 ## 3. Update Sample information
 
@@ -76,18 +82,18 @@ Since plink uses binary files, we have to re-configure the family structure and 
 
   * `--update-parents --update-sex`
     * to calculate allele frequency and other statistics, update the parent information and sex
-    * `--update-parents` takes a file with `FID IID DAD_IID MOM_IID`
+    * `--update-parents` takes a file with `FID IID DAD_IID MOM_IID` 
     * `--update-sex` takes a file with `FID IID SEX`
-      * for sex `1` is male `2` is female
+      * for sex `1` is male `2` is female 
 
   * `plink --bfile myvcf.upid --update-parents up.parents.txt --update-sex up.sex.txt --make-bed --out myvcf.final`
 
-## 4. Calculate Allele Frequency
+## 4. Calculate Allele Frequency 
 
-Plink correctly determines allele frequency by omitting children. A correct estimate of allele frequency in a population only considers unique genomes. Children are half copies of their parents, thus plink only considers founders for allele frequency.
+Plink correctly determines allele frequency by omitting children. A correct estimate of allele frequency in a population only considers unique genomes. Children are half copies of their parents, thus plink only considers founders for allele frequency. 
 
 ```
-plink --bfile myvcf.final --freq --out myvcf
+plink --bfile myvcf.final --freq --out myvcf 
 ```
 
 Get allele counts
@@ -96,9 +102,9 @@ Get allele counts
 plink --bfile myvcf.final --freq counts --out myvcf
 ```
 
-Note that plink records the minor allele frequency, NOT the ALT allele frequency
+Note that plink records the minor allele frequency, NOT the ALT allele frequency 
 
-  Examples:
+  Examples: 
 
   * ALT is minor allele
   * `1       1:15483:15484:G:T       T       G       0.25    4`
@@ -106,7 +112,7 @@ Note that plink records the minor allele frequency, NOT the ALT allele frequency
   * ALT is major allele
   * `1       1:28590:28591:T:TGG     T       TGG     0.25    4`
 
-To calculate the ALT allele frequency, for variants where ALT is major, just subtract 1 from the minor allele frequency.
+To calculate the ALT allele frequency, for variants where ALT is major, just subtract 1 from the minor allele frequency. 
 So for `1:28590:28591:T:TGG`, the minor allele frequency is 0.25, but the ALT allele frequency is 0.75
 
 ## 5. Find Mendelian Errors
@@ -122,7 +128,7 @@ Note: this will create large files!
 
 ## 6. Calculate Transmission Rates
 
-:open_mouth: :exclamation: **use plinkv1.07 for this step** :exclamation: :open_mouth:
+:open_mouth: :exclamation: **use plink v1.07 for this step** :exclamation: :open_mouth:
 
 until an updated release is provided. [See this bug report](https://github.com/chrchang/plink-ng/issues/90)
 
@@ -131,6 +137,7 @@ Note: when running plink-1.07 supply the `--noweb` option
 Before running this step, you will need to provide a phenotype file (unless you updated the phenotypes in an earlier step)
 
 The format of this phenotype file is
+
   *`FID IID PHENO`
   * phenotypes in plink are `2` for cases, `1` for controls, and `0` or `-9` for missing data
 
