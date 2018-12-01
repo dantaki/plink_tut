@@ -2,7 +2,7 @@
 
 ## Notes:
 
-Plink is old-school. It was written when microarrays were the bread and butter of genomic interrogation. In microarray analysis each marker has a unique identifier. This unique identifier is in plink instead of genomic position.
+Plink is old-school. It was written when microarrays were the bread and butter of genomic interrogation. In microarray analysis each marker has a unique identifier. This unique identifier is used in plink instead of genomic position.
 
 However, with WES/WGS, VCF files do not have unique indetifiers (in the "ID" column). Many variants not present in dbSNP will have a "." entry. Therefore, **we must create unique indentifiers for each variant** for the VCF to be used in plink.
 
