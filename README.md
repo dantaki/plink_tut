@@ -1,4 +1,4 @@
-# Plink Tutorial for VCF files
+# Plink Crash Course
 
 ## Notes:
 
@@ -8,13 +8,38 @@ However, with WES/WGS, VCF files do not have unique indentifiers (in the "ID" co
 
 Why use plink? Plink converts the VCF into a binary document that allows for extremely fast processing and calculation. For example, running a PCA analysis for over 6000 whole genomes in plink would take less than an hour. Doing this from a text-readable VCF would take many many hours, potentially days. So use plink!
 
-**For an example** See `/projects/ps-gleesonlab5/user/dantaki/plink_tut/` 
+**For an example** See `/projects/ps-gleesonlab5/user/dantaki/plink_tut/`
+
+
+---
+
+# Table of Contents
+
+Methods
+
+* [Create Unique Variant Identifiers]()
+
+* [Convert VCF into plink binary files]()
+
+* [Update Sample Information]()
+
+* [Calculate Allele Frequency]()
+
+* [Find Mendelian Errors]()
+
+* [Calculate Transmission Rates]()
+
+* [**Tips and Tricks**]()
+  * [TSCC/Comet Binaries]()
+  * [Converting Output to Tab-Delimited]()
+  * [Common File Formats]()
+    *[.fam Format]()
 
 ---
 
 # Method
 
-## 1. Create Unique Identifiers
+## 1. Create Unique Variant Identifiers
 
 ```
 $ bcftools annotate -Oz -x ID -I '%CHROM:%POS0:%END:%REF:%ALT' myvcf.vcf.gz >myvcf.reid.vcf.gz
@@ -26,7 +51,7 @@ $ bcftools annotate -Oz -x ID -I '%CHROM:%POS0:%END:%REF:%ALT' myvcf.vcf.gz >myv
   * %REF   : reference allele
   * %ALT   : derived allele
 
-## 2. Convert VCF into plink Bfile format
+## 2. Convert VCF into plink B-file format
 
 **requires plink v1.90**
 
@@ -57,7 +82,7 @@ Since plink uses binary files, we have to re-configure the family structure and 
 
   * `plink --bfile myvcf.upid --update-parents up.parents.txt --update-sex up.sex.txt --make-bed --out myvcf.final`
 
-## 4. Count Alleles
+## 4. Calculate Allele Frequency
 
 Plink correctly determines allele frequency by omitting children. A correct estimate of allele frequency in a population only considers unique genomes. Children are half copies of their parents, thus plink only considers founders for allele frequency.
 
@@ -95,9 +120,11 @@ Note: this will create large files!
 [.*mendel file formats](https://www.cog-genomics.org/plink/1.9/formats#mendel)
 
 
-## 6. Count Transmission Rates
+## 6. Calculate Transmission Rates
 
-**use plinkv1.07** until an updated release is provided. [See this bug report](https://github.com/chrchang/plink-ng/issues/90)
+:open_mouth: :exclamation: **use plinkv1.07 for this step** :exclamation: :open_mouth:
+
+until an updated release is provided. [See this bug report](https://github.com/chrchang/plink-ng/issues/90)
 
 Note: when running plink-1.07 supply the `--noweb` option
 
@@ -135,7 +162,7 @@ SNP     A1:A2   T:U_PAT T:U_MAT
 
 # Tips and Tricks
 
-precombiled plink binaries
+## Precompiled plink Binaries
 
 ```
 # plink v1.9
@@ -146,6 +173,8 @@ precombiled plink binaries
 # plink v1.07
 /home/dantakli/bin/plink-1.07
 ```
+
+## Converting space-delimited output to tab-delimited
 
 plink will output files in an odd space-delimited manner. If you like tabs (and you should), copy over this script (or export it in your `~/.bashrc`)
 
@@ -177,6 +206,7 @@ If you are confused about a file format, input or output, refer to this webpage
 ## Common File Formats
 
 ### .fam
+
 https://www.cog-genomics.org/plink/1.9/formats#fam
 
 ```
