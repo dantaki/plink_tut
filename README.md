@@ -4,7 +4,7 @@
 
 Plink is old-school. It was written when microarrays were the bread and butter of genomic interrogation. In microarray analysis each marker has a unique identifier. This unique identifier is used in plink instead of genomic position.
 
-However, with WES/WGS, VCF files do not have unique indetifiers (in the "ID" column). Many variants not present in dbSNP will have a "." entry. Therefore, **we must create unique indentifiers for each variant** for the VCF to be used in plink.
+However, with WES/WGS, VCF files do not have unique indentifiers (in the "ID" column). Many variants not present in dbSNP will have a "." entry. Therefore, **we must create unique indentifiers for each variant** for the VCF to be used in plink.
 
 Why use plink? Plink converts the VCF into a binary document that allows for extremely fast processing and calculation. For example, running a PCA analysis for over 6000 whole genomes in plink would take less than an hour. Doing this from a text-readable VCF would take many many hours, potentially days. So use plink!
 
